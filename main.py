@@ -3,7 +3,6 @@ import serial
 import threading
 import time
 
-
 class JoystickController:
     def __init__(self):
         self.ser = serial.Serial(baudrate=9600, port='COM1')
@@ -30,16 +29,18 @@ class JoystickController:
         while not self.done:
             self.update_axis_values()
             self.send_data()
-            time.sleep(0.5)
+            time.sleep(0.2)
 
     def update_axis_values(self):
         for axis in range(6):
             raw_value = self.joystick.get_axis(axis)
             if axis == 4 or axis == 5:
-                # Keep axis 4 and 5 values between -100 and 100
-                self.axis_values[axis] = int(raw_value * 100)
+                self.axis_values[axis] = int((raw_value + 1) * 50)  # Achse 4 und 5 werdencon 0-100 skaliert
             else:
-                self.axis_values[axis] = int(round(raw_value * 100))
+                if -15 >= raw_value >= 15:
+                    self.axis_values[axis] = 0
+                else:
+                    self.axis_values[axis] = int(round(raw_value * 100))
 
     def send_data(self):
         data_str = ','.join(map(str, self.axis_values))
@@ -67,6 +68,3 @@ class JoystickController:
 if __name__ == '__main__':
     controller = JoystickController()
     controller.start()
-
-
-#stable
