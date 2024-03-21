@@ -33,11 +33,12 @@ class JoystickController:
 
     def update_axis_values(self):
         for axis in range(6):
+            raw_value = self.joystick.get_axis(axis)
             if axis == 4 or axis == 5:
-                # Adjust axis 4 and 5
-                self.axis_values[axis] = int((self.joystick.get_axis(axis) + 1) * 0.5 * 10)
+                # Keep axis 4 and 5 values between -100 and 100
+                self.axis_values[axis] = int(raw_value * 100)
             else:
-                self.axis_values[axis] = int(self.joystick.get_axis(axis) * 10)
+                self.axis_values[axis] = int(round(raw_value * 100))
 
     def send_data(self):
         data_str = ','.join(map(str, self.axis_values))
