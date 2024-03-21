@@ -3,6 +3,7 @@ import serial
 import threading
 import time
 
+
 class JoystickController:
     def __init__(self):
         self.ser = serial.Serial(baudrate=9600, port='COM1')
@@ -66,3 +67,6 @@ class JoystickController:
 if __name__ == '__main__':
     controller = JoystickController()
     controller.start()
+
+
+#stable
